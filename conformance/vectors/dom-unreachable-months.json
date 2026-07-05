@@ -1,0 +1,46 @@
+{
+  "$schema": "../schema.json",
+  "rule": "dom-unreachable-months",
+  "vectors": [
+    {
+      "name": "thirty-first-every-month",
+      "expression": "0 0 31 * *",
+      "expect": [{ "rule": "dom-unreachable-months", "severity": "warning", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "twenty-ninth-every-month-feb-nonleap",
+      "expression": "0 0 29 * *",
+      "expect": [{ "rule": "dom-unreachable-months", "severity": "warning", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "thirty-first-january-and-april",
+      "expression": "0 0 31 1,4 *",
+      "expect": [{ "rule": "dom-unreachable-months", "severity": "warning", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "thirtieth-february-and-march",
+      "expression": "0 0 30 2,3 *",
+      "expect": [{ "rule": "dom-unreachable-months", "severity": "warning", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "suppressed-by-never-fires",
+      "expression": "0 0 30 2 *",
+      "expect": [{ "rule": "never-fires", "severity": "error", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "dow-restricted-provides-firing-days",
+      "expression": "0 0 31 * 1",
+      "expect": [{ "rule": "dom-dow-both", "severity": "warning", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "thirty-first-in-long-months-is-clean",
+      "expression": "0 0 31 1,3,5,7,8,10,12 *",
+      "expect": []
+    },
+    {
+      "name": "twenty-eighth-is-clean",
+      "expression": "0 0 28 * *",
+      "expect": []
+    }
+  ]
+}

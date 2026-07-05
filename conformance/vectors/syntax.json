@@ -1,0 +1,99 @@
+{
+  "$schema": "../schema.json",
+  "rule": "syntax",
+  "vectors": [
+    {
+      "name": "four-fields",
+      "expression": "* * * *",
+      "expect": [{ "rule": "syntax", "severity": "error" }]
+    },
+    {
+      "name": "seven-fields",
+      "expression": "* * * * * * *",
+      "expect": [{ "rule": "syntax", "severity": "error" }]
+    },
+    {
+      "name": "empty-string",
+      "expression": "",
+      "expect": [{ "rule": "syntax", "severity": "error" }]
+    },
+    {
+      "name": "minute-60",
+      "expression": "60 * * * *",
+      "expect": [{ "rule": "syntax", "severity": "error", "field": "minute" }]
+    },
+    {
+      "name": "hour-24",
+      "expression": "0 24 * * *",
+      "expect": [{ "rule": "syntax", "severity": "error", "field": "hour" }]
+    },
+    {
+      "name": "day-of-month-zero",
+      "expression": "0 0 0 * *",
+      "expect": [{ "rule": "syntax", "severity": "error", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "two-fields-out-of-bounds",
+      "expression": "0 0 32 13 *",
+      "expect": [
+        { "rule": "syntax", "severity": "error", "field": "dayOfMonth" },
+        { "rule": "syntax", "severity": "error", "field": "month" }
+      ]
+    },
+    {
+      "name": "day-of-week-8",
+      "expression": "0 0 * * 8",
+      "expect": [{ "rule": "syntax", "severity": "error", "field": "dayOfWeek" }]
+    },
+    {
+      "name": "garbage-token",
+      "expression": "foo * * * *",
+      "expect": [{ "rule": "syntax", "severity": "error", "field": "minute" }]
+    },
+    {
+      "name": "full-month-name-rejected",
+      "expression": "0 0 * JANUARY *",
+      "expect": [{ "rule": "syntax", "severity": "error", "field": "month" }]
+    },
+    {
+      "name": "month-name-in-dow-field",
+      "expression": "0 0 * * JAN",
+      "expect": [{ "rule": "syntax", "severity": "error", "field": "dayOfWeek" }]
+    },
+    {
+      "name": "unknown-shortcut",
+      "expression": "@fortnightly",
+      "expect": [{ "rule": "syntax", "severity": "error" }]
+    },
+    {
+      "name": "non-numeric-step",
+      "expression": "*/x * * * *",
+      "expect": [{ "rule": "syntax", "severity": "error", "field": "minute" }]
+    },
+    {
+      "name": "empty-list-term",
+      "expression": "1,,2 * * * *",
+      "expect": [{ "rule": "syntax", "severity": "error", "field": "minute" }]
+    },
+    {
+      "name": "l-token-unsupported",
+      "expression": "0 0 L * *",
+      "expect": [{ "rule": "unsupported-token", "severity": "error", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "w-token-unsupported",
+      "expression": "0 0 15W * *",
+      "expect": [{ "rule": "unsupported-token", "severity": "error", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "hash-token-unsupported",
+      "expression": "0 0 * * 1#2",
+      "expect": [{ "rule": "unsupported-token", "severity": "error", "field": "dayOfWeek" }]
+    },
+    {
+      "name": "question-mark-unsupported",
+      "expression": "0 0 ? * 1",
+      "expect": [{ "rule": "unsupported-token", "severity": "error", "field": "dayOfMonth" }]
+    }
+  ]
+}

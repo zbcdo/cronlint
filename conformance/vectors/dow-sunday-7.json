@@ -1,0 +1,44 @@
+{
+  "$schema": "../schema.json",
+  "rule": "dow-sunday-7",
+  "vectors": [
+    {
+      "name": "plain-seven",
+      "expression": "0 0 * * 7",
+      "expect": [{ "rule": "dow-sunday-7", "severity": "info", "field": "dayOfWeek" }]
+    },
+    {
+      "name": "range-ending-in-seven",
+      "expression": "0 0 * * 5-7",
+      "expect": [{ "rule": "dow-sunday-7", "severity": "info", "field": "dayOfWeek" }]
+    },
+    {
+      "name": "list-containing-seven",
+      "expression": "0 0 * * 1,7",
+      "expect": [{ "rule": "dow-sunday-7", "severity": "info", "field": "dayOfWeek" }]
+    },
+    {
+      "name": "seven-in-six-field-dialect",
+      "expression": "0 0 12 * * 7",
+      "expect": [{ "rule": "dow-sunday-7", "severity": "info", "field": "dayOfWeek" }]
+    },
+    {
+      "name": "seven-alongside-dom",
+      "expression": "0 0 15 * 7",
+      "expect": [
+        { "rule": "dom-dow-both", "severity": "warning", "field": "dayOfMonth" },
+        { "rule": "dow-sunday-7", "severity": "info", "field": "dayOfWeek" }
+      ]
+    },
+    {
+      "name": "zero-is-clean",
+      "expression": "0 0 * * 0",
+      "expect": []
+    },
+    {
+      "name": "sun-name-is-clean",
+      "expression": "0 0 * * SUN",
+      "expect": []
+    }
+  ]
+}

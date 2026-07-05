@@ -1,0 +1,46 @@
+{
+  "$schema": "../schema.json",
+  "rule": "step-invalid",
+  "vectors": [
+    {
+      "name": "minute-step-90",
+      "expression": "*/90 * * * *",
+      "expect": [{ "rule": "step-invalid", "severity": "error", "field": "minute" }]
+    },
+    {
+      "name": "minute-step-zero",
+      "expression": "*/0 * * * *",
+      "expect": [{ "rule": "step-invalid", "severity": "error", "field": "minute" }]
+    },
+    {
+      "name": "hour-step-25",
+      "expression": "0 */25 * * *",
+      "expect": [{ "rule": "step-invalid", "severity": "error", "field": "hour" }]
+    },
+    {
+      "name": "dom-step-32",
+      "expression": "0 0 */32 * *",
+      "expect": [{ "rule": "step-invalid", "severity": "error", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "dow-step-8",
+      "expression": "0 0 * * */8",
+      "expect": [{ "rule": "step-invalid", "severity": "error", "field": "dayOfWeek" }]
+    },
+    {
+      "name": "month-step-13",
+      "expression": "0 0 1 */13 *",
+      "expect": [{ "rule": "step-invalid", "severity": "error", "field": "month" }]
+    },
+    {
+      "name": "step-15-is-clean",
+      "expression": "*/15 * * * *",
+      "expect": []
+    },
+    {
+      "name": "step-equal-to-span-is-clean",
+      "expression": "*/60 * * * *",
+      "expect": []
+    }
+  ]
+}

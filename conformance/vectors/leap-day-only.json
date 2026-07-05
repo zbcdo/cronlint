@@ -1,0 +1,41 @@
+{
+  "$schema": "../schema.json",
+  "rule": "leap-day-only",
+  "vectors": [
+    {
+      "name": "canonical-feb-29",
+      "expression": "0 0 29 2 *",
+      "expect": [{ "rule": "leap-day-only", "severity": "info", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "feb-by-name",
+      "expression": "0 0 29 FEB *",
+      "expect": [{ "rule": "leap-day-only", "severity": "info", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "with-specific-time",
+      "expression": "30 6 29 2 *",
+      "expect": [{ "rule": "leap-day-only", "severity": "info", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "six-field-dialect",
+      "expression": "0 0 0 29 2 *",
+      "expect": [{ "rule": "leap-day-only", "severity": "info", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "feb-28-fires-yearly-not-leap-day-only",
+      "expression": "0 0 28 2 *",
+      "expect": [{ "rule": "freq-extreme", "severity": "info" }]
+    },
+    {
+      "name": "feb-and-march-29-is-unreachable-months-instead",
+      "expression": "0 0 29 2,3 *",
+      "expect": [{ "rule": "dom-unreachable-months", "severity": "warning", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "dow-restriction-adds-firing-days",
+      "expression": "0 0 29 2 1",
+      "expect": [{ "rule": "dom-dow-both", "severity": "warning", "field": "dayOfMonth" }]
+    }
+  ]
+}

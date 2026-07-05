@@ -1,0 +1,51 @@
+{
+  "$schema": "../schema.json",
+  "rule": "step-uneven",
+  "vectors": [
+    {
+      "name": "dom-every-7-resets-at-month-boundary",
+      "expression": "0 0 */7 * *",
+      "expect": [{ "rule": "step-uneven", "severity": "info", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "minute-every-7-resets-at-hour-boundary",
+      "expression": "*/7 * * * *",
+      "expect": [{ "rule": "step-uneven", "severity": "info", "field": "minute" }]
+    },
+    {
+      "name": "dow-every-2-resets-at-week-boundary",
+      "expression": "0 0 * * */2",
+      "expect": [{ "rule": "step-uneven", "severity": "info", "field": "dayOfWeek" }]
+    },
+    {
+      "name": "hour-every-5-resets-at-midnight",
+      "expression": "0 */5 * * *",
+      "expect": [{ "rule": "step-uneven", "severity": "info", "field": "hour" }]
+    },
+    {
+      "name": "range-span-not-divisible",
+      "expression": "1-10/3 * * * *",
+      "expect": [{ "rule": "step-uneven", "severity": "info", "field": "minute" }]
+    },
+    {
+      "name": "month-every-5",
+      "expression": "0 0 1 */5 *",
+      "expect": [{ "rule": "step-uneven", "severity": "info", "field": "month" }]
+    },
+    {
+      "name": "even-star-step-is-clean",
+      "expression": "*/15 * * * *",
+      "expect": []
+    },
+    {
+      "name": "even-range-step-is-clean",
+      "expression": "0-59/5 * * * *",
+      "expect": []
+    },
+    {
+      "name": "hour-every-6-is-clean",
+      "expression": "0 */6 * * *",
+      "expect": []
+    }
+  ]
+}

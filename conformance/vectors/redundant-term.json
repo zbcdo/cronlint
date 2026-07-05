@@ -1,0 +1,52 @@
+{
+  "$schema": "../schema.json",
+  "rule": "redundant-term",
+  "vectors": [
+    {
+      "name": "star-in-hour-list",
+      "expression": "0 *,5 * * *",
+      "expect": [{ "rule": "redundant-term", "severity": "info", "field": "hour" }]
+    },
+    {
+      "name": "star-in-minute-list-still-fires-every-minute",
+      "expression": "*,5 * * * *",
+      "expect": [
+        { "rule": "redundant-term", "severity": "info", "field": "minute" },
+        { "rule": "freq-extreme", "severity": "info" }
+      ]
+    },
+    {
+      "name": "duplicate-value",
+      "expression": "5,5 * * * *",
+      "expect": [{ "rule": "redundant-term", "severity": "info", "field": "minute" }]
+    },
+    {
+      "name": "value-contained-in-range",
+      "expression": "0 0 1-10,5 * *",
+      "expect": [{ "rule": "redundant-term", "severity": "info", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "range-contained-in-range",
+      "expression": "0 0 * 1-6,3-4 *",
+      "expect": [{ "rule": "redundant-term", "severity": "info", "field": "month" }]
+    },
+    {
+      "name": "sunday-written-both-ways",
+      "expression": "0 0 * * 0,7",
+      "expect": [
+        { "rule": "redundant-term", "severity": "info", "field": "dayOfWeek" },
+        { "rule": "dow-sunday-7", "severity": "info", "field": "dayOfWeek" }
+      ]
+    },
+    {
+      "name": "distinct-list-is-clean",
+      "expression": "1,5,10 * * * *",
+      "expect": []
+    },
+    {
+      "name": "overlap-without-containment-is-clean",
+      "expression": "0 0 1-10,5-15 * *",
+      "expect": []
+    }
+  ]
+}

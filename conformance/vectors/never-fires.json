@@ -1,0 +1,46 @@
+{
+  "$schema": "../schema.json",
+  "rule": "never-fires",
+  "vectors": [
+    {
+      "name": "february-30",
+      "expression": "0 0 30 2 *",
+      "expect": [{ "rule": "never-fires", "severity": "error", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "april-31",
+      "expression": "0 0 31 4 *",
+      "expect": [{ "rule": "never-fires", "severity": "error", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "day-31-in-months-without-31",
+      "expression": "0 0 31 2,4,6 *",
+      "expect": [{ "rule": "never-fires", "severity": "error", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "february-30-and-31",
+      "expression": "0 0 30,31 2 *",
+      "expect": [{ "rule": "never-fires", "severity": "error", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "february-29-is-leap-day-only-not-never-fires",
+      "expression": "0 0 29 2 *",
+      "expect": [{ "rule": "leap-day-only", "severity": "info", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "january-31-fires-yearly-not-never-fires",
+      "expression": "0 0 31 1 *",
+      "expect": [{ "rule": "freq-extreme", "severity": "info" }]
+    },
+    {
+      "name": "dow-restriction-provides-firing-days",
+      "expression": "0 0 30 2 1",
+      "expect": [{ "rule": "dom-dow-both", "severity": "warning", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "one-reachable-month-downgrades-to-unreachable-months",
+      "expression": "0 0 31 1,4 *",
+      "expect": [{ "rule": "dom-unreachable-months", "severity": "warning", "field": "dayOfMonth" }]
+    }
+  ]
+}

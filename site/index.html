@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>cronlint — a linter for cron expressions</title>
+  <meta name="description" content="cronlint is a zero-dependency linter for cron expressions. It catches the mistakes that break schedules silently: dates that never fire, jobs that run 1,440 times a day, and clock-change surprises.">
+  <link rel="canonical" href="https://cronlint.org">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cronlint.org">
+  <meta property="og:title" content="cronlint — a linter for cron expressions">
+  <meta property="og:description" content="Catches the mistakes that break schedules silently. Zero dependencies, thirteen rules, conformance-tested.">
+  <meta property="og:site_name" content="cronlint">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f172a'/%3E%3Ctext x='16' y='25' font-family='monospace' font-size='24' font-weight='bold' fill='%23f43f5e' text-anchor='middle'%3E%5E%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap">
+  <style>
+    :root {
+      --bg: #fafaf9;
+      --fg: #1c1917;
+      --muted: #78716c;
+      --panel: #ffffff;
+      --panel-dark: #1c1917;
+      --panel-dark-fg: #e7e5e4;
+      --border: #e7e5e4;
+      --accent: #e11d48;
+      --accent-soft: #ffe4e6;
+      --link: #be123c;
+      --ok: #16a34a;
+      --dim: #a8a29e;
+      --w-tool: 44rem;
+      --radius: 10px;
+      --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0c0a09;
+        --fg: #e7e5e4;
+        --muted: #a8a29e;
+        --panel: #1c1917;
+        --panel-dark: #171412;
+        --panel-dark-fg: #e7e5e4;
+        --border: #292524;
+        --accent: #fb7185;
+        --accent-soft: #3f1220;
+        --link: #fda4af;
+        --dim: #57534e;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    main {
+      max-width: var(--w-tool);
+      margin: 0 auto;
+      padding: 4rem 1.25rem 2rem;
+    }
+    header { text-align: center; margin-bottom: 3rem; }
+    .wordmark {
+      font-family: var(--font-mono);
+      font-size: 2.75rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+    .wordmark .caret { color: var(--accent); }
+    .pitch {
+      font-size: 1.15rem;
+      color: var(--muted);
+      margin: 0.75rem auto 0;
+      max-width: 34rem;
+    }
+
+    .install {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.9rem 1.1rem;
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      margin: 0 auto 2.5rem;
+    }
+    .install code { user-select: all; }
+    .install .prompt { color: var(--dim); user-select: none; }
+    .copy-btn {
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      border-radius: 6px;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+    }
+    .copy-btn:hover { color: var(--fg); border-color: var(--muted); }
+
+    .terminal {
+      background: var(--panel-dark);
+      color: var(--panel-dark-fg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 1.25rem 1.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.83rem;
+      line-height: 1.55;
+      overflow-x: auto;
+      margin-bottom: 3rem;
+    }
+    .terminal pre { margin: 0; white-space: pre; }
+    .t-prompt { color: #86efac; }
+    .t-err { color: #fb7185; font-weight: 600; }
+    .t-caret { color: #fb7185; font-weight: 600; }
+    .t-dim { color: #78716c; }
+    .t-cmd { color: var(--panel-dark-fg); }
+    .terminal.usage { margin-bottom: 0.75rem; }
+    .usage-more {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--dim);
+      margin: 0 0 3rem;
+    }
+    .usage-more a { color: var(--muted); text-decoration: none; }
+    .usage-more a:hover { color: var(--link); text-decoration: underline; }
+
+    h2 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-align: center;
+      margin: 0 0 1.25rem;
+      font-weight: 600;
+    }
+    .rules {
+      list-style: none;
+      margin: 0 0 3rem;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+    .rules a {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--link);
+      text-decoration: none;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.35rem 0.9rem;
+    }
+    .rules a:hover { border-color: var(--accent); color: var(--accent); }
+
+    .cta { text-align: center; margin-bottom: 3.5rem; }
+    .cta a.button {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1.05rem;
+      text-decoration: none;
+      border-radius: var(--radius);
+      padding: 0.85rem 1.9rem;
+    }
+    .cta a.button:hover { filter: brightness(1.08); }
+    .cta .sub { color: var(--muted); font-size: 0.9rem; margin-top: 0.6rem; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--link); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    .icon-link {
+      display: inline-flex;
+      color: var(--muted);
+    }
+    .icon-link:hover { color: var(--link); }
+    .icon-link svg { display: block; }
+    .top-links {
+      position: absolute;
+      top: 1rem;
+      right: 1.25rem;
+      display: flex;
+      gap: 0.9rem;
+    }
+    .top-links .icon-link svg { width: 20px; height: 20px; }
+    footer { flex-direction: column; gap: 0.75rem; }
+    .footer-icons { display: flex; gap: 1.1rem; }
+    .footer-icons .icon-link svg { width: 22px; height: 22px; }
+    .colophon { margin: 0; }
+    .colophon a { color: var(--muted); text-decoration: underline; }
+    .colophon a:hover { color: var(--link); }
+  </style>
+</head>
+<body>
+  <!-- Simple Icons (simpleicons.org) glyphs, inlined; referenced via <use>. -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="i-github" viewBox="0 0 24 24">
+      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-npm" viewBox="0 0 24 24">
+      <path d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.04 19.17H5.113z" fill="currentColor"/>
+    </symbol>
+  </svg>
+
+  <nav class="top-links">
+    <a class="icon-link" href="https://github.com/zbcdo/cronlint" aria-label="cronlint on GitHub">
+      <svg aria-hidden="true"><use href="#i-github"/></svg>
+    </a>
+    <a class="icon-link" href="https://www.npmjs.com/package/cronlint" aria-label="cronlint on npm">
+      <svg aria-hidden="true"><use href="#i-npm"/></svg>
+    </a>
+  </nav>
+
+  <main>
+    <header>
+      <h1 class="wordmark"><span class="caret">^</span>cronlint</h1>
+      <p class="pitch">A linter for cron expressions — catches the mistakes that break schedules silently.</p>
+    </header>
+
+    <div class="install">
+      <div><span class="prompt">$ </span><code id="install-cmd">npm install -g cronlint</code></div>
+      <button class="copy-btn" id="copy" aria-label="Copy install command">Copy</button>
+    </div>
+
+    <div class="terminal" role="img" aria-label="Terminal showing cronlint reporting that the schedule 0 0 30 2 star never runs, because February 30th does not exist.">
+<pre><span class="t-prompt">$</span> cronlint "0 0 30 2 *"
+<span class="t-err">error[never-fires]</span>: This job will never run: it is scheduled ONLY for
+the 30th of February — a date that does not exist. Cron accepts an
+impossible date without complaint and simply never fires it. Use a day
+that month actually has, such as the 28th.
+
+    0 0 30 2 *
+        <span class="t-caret">^^</span>
+    <span class="t-dim">= docs: https://cronhelp.me/rules/never-fires</span>
+
+<span class="t-dim">1 error, 0 warnings, 0 notes</span></pre>
+    </div>
+
+    <h2>Usage</h2>
+    <div class="terminal usage">
+<pre><span class="t-cmd">cronlint "&lt;expression&gt;"</span>          <span class="t-dim">lint one expression</span>
+<span class="t-cmd">cronlint --tz America/New_York</span>   <span class="t-dim">evaluate DST rules against a zone</span>
+<span class="t-cmd">cronlint --format compact</span>        <span class="t-dim">one line per finding (grep-friendly)</span>
+<span class="t-cmd">cronlint --format github</span>         <span class="t-dim">annotation output for GitHub Actions CI</span>
+<span class="t-cmd">cronlint --format json</span>           <span class="t-dim">machine-readable diagnostics</span>
+<span class="t-cmd">cronlint --strict</span>                <span class="t-dim">warnings also fail (exit 1)</span>
+<span class="t-cmd">crontab -l | cronlint -</span>          <span class="t-dim">lint every line of your crontab</span>
+<span class="t-cmd">npx cronlint "&lt;expr&gt;"</span>            <span class="t-dim">run without installing</span></pre>
+    </div>
+    <p class="usage-more"><a href="https://github.com/zbcdo/cronlint#readme">Full reference in the README →</a></p>
+
+    <h2>Thirteen rules so far…</h2>
+    <ul class="rules">
+      <li><a href="https://cronhelp.me/rules/never-fires">never-fires</a></li>
+      <li><a href="https://cronhelp.me/rules/step-invalid">step-invalid</a></li>
+      <li><a href="https://cronhelp.me/rules/dom-unreachable-months">dom-unreachable-months</a></li>
+      <li><a href="https://cronhelp.me/rules/dom-dow-both">dom-dow-both</a></li>
+      <li><a href="https://cronhelp.me/rules/star-minute-restricted">star-minute-restricted</a></li>
+      <li><a href="https://cronhelp.me/rules/dst-ambiguous">dst-ambiguous</a></li>
+      <li><a href="https://cronhelp.me/rules/range-wrap">range-wrap</a></li>
+      <li><a href="https://cronhelp.me/rules/freq-extreme">freq-extreme</a></li>
+      <li><a href="https://cronhelp.me/rules/leap-day-only">leap-day-only</a></li>
+      <li><a href="https://cronhelp.me/rules/nonportable-shortcut">nonportable-shortcut</a></li>
+      <li><a href="https://cronhelp.me/rules/redundant-term">redundant-term</a></li>
+      <li><a href="https://cronhelp.me/rules/step-uneven">step-uneven</a></li>
+      <li><a href="https://cronhelp.me/rules/dow-sunday-7">dow-sunday-7</a></li>
+    </ul>
+
+    <div class="cta">
+      <a class="button" href="https://cronhelp.me">Try it live → cronhelp.me</a>
+      <p class="sub">Paste an expression, see every finding explained.</p>
+    </div>
+
+    <footer>
+      <div class="footer-icons">
+        <a class="icon-link" href="https://github.com/zbcdo/cronlint" aria-label="cronlint on GitHub">
+          <svg aria-hidden="true"><use href="#i-github"/></svg>
+        </a>
+        <a class="icon-link" href="https://www.npmjs.com/package/cronlint" aria-label="cronlint on npm">
+          <svg aria-hidden="true"><use href="#i-npm"/></svg>
+        </a>
+      </div>
+      <p class="colophon">Created by René Peter. Licensed under <a href="https://github.com/zbcdo/cronlint/blob/HEAD/LICENSE">MIT</a>.</p>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("copy").addEventListener("click", function () {
+      var btn = this;
+      navigator.clipboard.writeText(document.getElementById("install-cmd").textContent).then(function () {
+        btn.textContent = "Copied";
+        setTimeout(function () { btn.textContent = "Copy"; }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>

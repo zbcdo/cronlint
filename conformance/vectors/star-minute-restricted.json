@@ -1,0 +1,49 @@
+{
+  "$schema": "../schema.json",
+  "rule": "star-minute-restricted",
+  "vectors": [
+    {
+      "name": "every-minute-on-the-first",
+      "expression": "* * 1 * *",
+      "expect": [{ "rule": "star-minute-restricted", "severity": "warning", "field": "minute" }]
+    },
+    {
+      "name": "every-minute-on-mondays",
+      "expression": "* * * * 1",
+      "expect": [{ "rule": "star-minute-restricted", "severity": "warning", "field": "minute" }]
+    },
+    {
+      "name": "every-minute-in-december",
+      "expression": "* * * 12 *",
+      "expect": [{ "rule": "star-minute-restricted", "severity": "warning", "field": "minute" }]
+    },
+    {
+      "name": "with-dom-and-dow-both",
+      "expression": "* * 1 * 1",
+      "expect": [
+        { "rule": "star-minute-restricted", "severity": "warning", "field": "minute" },
+        { "rule": "dom-dow-both", "severity": "warning", "field": "dayOfMonth" }
+      ]
+    },
+    {
+      "name": "six-field-every-second-on-the-first",
+      "expression": "* * * 1 * *",
+      "expect": [{ "rule": "star-minute-restricted", "severity": "warning", "field": "minute" }]
+    },
+    {
+      "name": "fixed-time-is-clean",
+      "expression": "0 0 1 * *",
+      "expect": []
+    },
+    {
+      "name": "no-date-restriction-is-freq-extreme-instead",
+      "expression": "* * * * *",
+      "expect": [{ "rule": "freq-extreme", "severity": "info" }]
+    },
+    {
+      "name": "restricted-hour-does-not-fire",
+      "expression": "* 2 1 * *",
+      "expect": []
+    }
+  ]
+}

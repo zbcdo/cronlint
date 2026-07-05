@@ -1,0 +1,44 @@
+{
+  "$schema": "../schema.json",
+  "rule": "dom-dow-both",
+  "vectors": [
+    {
+      "name": "first-week-and-monday",
+      "expression": "0 0 1-7 * 1",
+      "expect": [{ "rule": "dom-dow-both", "severity": "warning", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "mid-month-and-friday",
+      "expression": "30 12 15 * 5",
+      "expect": [{ "rule": "dom-dow-both", "severity": "warning", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "dom-list-and-weekend",
+      "expression": "0 8 1,15 * 6,0",
+      "expect": [{ "rule": "dom-dow-both", "severity": "warning", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "dow-provides-firing-days-for-impossible-dom",
+      "expression": "0 0 30 2 1",
+      "expect": [{ "rule": "dom-dow-both", "severity": "warning", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "dom-step-and-dow",
+      "expression": "0 0 */2 * 1",
+      "expect": [
+        { "rule": "dom-dow-both", "severity": "warning", "field": "dayOfMonth" },
+        { "rule": "step-uneven", "severity": "info", "field": "dayOfMonth" }
+      ]
+    },
+    {
+      "name": "dom-only-is-clean",
+      "expression": "0 0 1-7 * *",
+      "expect": []
+    },
+    {
+      "name": "dow-only-is-clean",
+      "expression": "0 0 * * 1",
+      "expect": []
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+dist/
+coverage/
+package-lock.json
+cronhelp-me-build-spec-v1.md

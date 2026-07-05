@@ -1,0 +1,74 @@
+{
+  "name": "cronlint",
+  "version": "0.1.0",
+  "description": "Zero-dependency cron expression parser and linter with a language-agnostic conformance suite",
+  "keywords": [
+    "cron",
+    "crontab",
+    "lint",
+    "linter",
+    "cron-expression",
+    "scheduler"
+  ],
+  "license": "MIT",
+  "author": "René Peter",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zbcdo/cronlint"
+  },
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/esm/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
+  "bin": {
+    "cronlint": "dist/esm/cli.js"
+  },
+  "files": [
+    "dist",
+    "conformance",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "rm -rf dist && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && node scripts/postbuild.mjs",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"conformance/**/*.json\" \"*.{js,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\" \"conformance/**/*.json\" \"*.{js,json,md}\"",
+    "lint": "eslint src test",
+    "lint:fix": "eslint --fix src test",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/node": "^22.10.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "eslint": "^10.6.0",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "9.1.7",
+    "lint-staged": "17.0.8",
+    "prettier": "^3.9.4",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.62.1",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
+}

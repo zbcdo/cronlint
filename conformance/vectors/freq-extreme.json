@@ -1,0 +1,54 @@
+{
+  "$schema": "../schema.json",
+  "rule": "freq-extreme",
+  "vectors": [
+    {
+      "name": "every-minute",
+      "expression": "* * * * *",
+      "expect": [{ "rule": "freq-extreme", "severity": "info" }]
+    },
+    {
+      "name": "every-second",
+      "expression": "* * * * * *",
+      "expect": [{ "rule": "freq-extreme", "severity": "info" }]
+    },
+    {
+      "name": "once-a-year",
+      "expression": "0 0 1 1 *",
+      "expect": [{ "rule": "freq-extreme", "severity": "info" }]
+    },
+    {
+      "name": "yearly-shortcut",
+      "expression": "@yearly",
+      "expect": [
+        { "rule": "freq-extreme", "severity": "info" },
+        { "rule": "nonportable-shortcut", "severity": "info" }
+      ]
+    },
+    {
+      "name": "resolved-full-minutes-via-range",
+      "expression": "0-59 * * * *",
+      "expect": [{ "rule": "freq-extreme", "severity": "info" }]
+    },
+    {
+      "name": "suppressed-by-star-minute-restricted",
+      "expression": "* * 1 * *",
+      "expect": [{ "rule": "star-minute-restricted", "severity": "warning", "field": "minute" }]
+    },
+    {
+      "name": "every-five-minutes-is-clean",
+      "expression": "*/5 * * * *",
+      "expect": []
+    },
+    {
+      "name": "daily-is-clean",
+      "expression": "0 0 * * *",
+      "expect": []
+    },
+    {
+      "name": "twice-a-year-is-clean",
+      "expression": "0 0 1 1,7 *",
+      "expect": []
+    }
+  ]
+}

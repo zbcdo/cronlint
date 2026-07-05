@@ -1,0 +1,52 @@
+{
+  "$schema": "../schema.json",
+  "rule": "dst-ambiguous",
+  "vectors": [
+    {
+      "name": "two-thirty-no-timezone-is-info",
+      "expression": "30 2 * * *",
+      "expect": [{ "rule": "dst-ambiguous", "severity": "info", "field": "hour" }]
+    },
+    {
+      "name": "two-thirty-new-york-is-warning",
+      "expression": "30 2 * * *",
+      "options": { "timezone": "America/New_York" },
+      "expect": [{ "rule": "dst-ambiguous", "severity": "warning", "field": "hour" }]
+    },
+    {
+      "name": "zone-without-dst-does-not-fire",
+      "expression": "30 2 * * *",
+      "options": { "timezone": "America/Port_of_Spain" },
+      "expect": []
+    },
+    {
+      "name": "utc-does-not-fire",
+      "expression": "0 2 * * *",
+      "options": { "timezone": "UTC" },
+      "expect": []
+    },
+    {
+      "name": "hour-range-hits-window-berlin",
+      "expression": "0 1-3 * * *",
+      "options": { "timezone": "Europe/Berlin" },
+      "expect": [{ "rule": "dst-ambiguous", "severity": "warning", "field": "hour" }]
+    },
+    {
+      "name": "hour-step-hits-window-no-timezone",
+      "expression": "15 */2 * * *",
+      "expect": [{ "rule": "dst-ambiguous", "severity": "info", "field": "hour" }]
+    },
+    {
+      "name": "star-minute-does-not-fire",
+      "expression": "* 2 * * *",
+      "options": { "timezone": "America/New_York" },
+      "expect": []
+    },
+    {
+      "name": "hour-outside-window-does-not-fire",
+      "expression": "30 4 * * *",
+      "options": { "timezone": "America/New_York" },
+      "expect": []
+    }
+  ]
+}

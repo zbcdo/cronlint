@@ -1,0 +1,81 @@
+{
+  "$schema": "../schema.json",
+  "rule": "clean",
+  "vectors": [
+    {
+      "name": "every-five-minutes",
+      "expression": "*/5 * * * *",
+      "expect": []
+    },
+    {
+      "name": "daily-midnight",
+      "expression": "0 0 * * *",
+      "expect": []
+    },
+    {
+      "name": "hourly-on-the-hour",
+      "expression": "0 * * * *",
+      "expect": []
+    },
+    {
+      "name": "weekdays-nine-am",
+      "expression": "0 9 * * 1-5",
+      "expect": []
+    },
+    {
+      "name": "monthly-first-day",
+      "expression": "0 0 1 * *",
+      "expect": []
+    },
+    {
+      "name": "monthly-early-morning",
+      "expression": "30 4 1 * *",
+      "expect": []
+    },
+    {
+      "name": "specific-afternoon-time-monthly",
+      "expression": "15 14 1 * *",
+      "expect": []
+    },
+    {
+      "name": "late-evening-weekdays",
+      "expression": "0 22 * * 1-5",
+      "expect": []
+    },
+    {
+      "name": "even-hour-range-step",
+      "expression": "0 8-17/2 * * *",
+      "expect": []
+    },
+    {
+      "name": "twice-daily",
+      "expression": "0 0,12 * * *",
+      "expect": []
+    },
+    {
+      "name": "sunday-by-name",
+      "expression": "5 4 * * SUN",
+      "expect": []
+    },
+    {
+      "name": "monday-wednesday-friday",
+      "expression": "0 6 * * 1,3,5",
+      "expect": []
+    },
+    {
+      "name": "six-field-every-five-minutes",
+      "expression": "0 */5 * * * *",
+      "expect": []
+    },
+    {
+      "name": "six-field-specific-time",
+      "expression": "30 30 14 * * *",
+      "expect": []
+    },
+    {
+      "name": "saturday-evening",
+      "expression": "45 23 * * 6",
+      "expect": []
+    }
+  ]
+}

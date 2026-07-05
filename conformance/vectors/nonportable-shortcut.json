@@ -1,0 +1,54 @@
+{
+  "$schema": "../schema.json",
+  "rule": "nonportable-shortcut",
+  "vectors": [
+    {
+      "name": "reboot",
+      "expression": "@reboot",
+      "expect": [{ "rule": "nonportable-shortcut", "severity": "info" }]
+    },
+    {
+      "name": "daily",
+      "expression": "@daily",
+      "expect": [{ "rule": "nonportable-shortcut", "severity": "info" }]
+    },
+    {
+      "name": "midnight",
+      "expression": "@midnight",
+      "expect": [{ "rule": "nonportable-shortcut", "severity": "info" }]
+    },
+    {
+      "name": "hourly",
+      "expression": "@hourly",
+      "expect": [{ "rule": "nonportable-shortcut", "severity": "info" }]
+    },
+    {
+      "name": "weekly",
+      "expression": "@weekly",
+      "expect": [{ "rule": "nonportable-shortcut", "severity": "info" }]
+    },
+    {
+      "name": "monthly",
+      "expression": "@monthly",
+      "expect": [{ "rule": "nonportable-shortcut", "severity": "info" }]
+    },
+    {
+      "name": "yearly-also-flags-frequency",
+      "expression": "@yearly",
+      "expect": [
+        { "rule": "nonportable-shortcut", "severity": "info" },
+        { "rule": "freq-extreme", "severity": "info" }
+      ]
+    },
+    {
+      "name": "explicit-daily-is-clean",
+      "expression": "0 0 * * *",
+      "expect": []
+    },
+    {
+      "name": "explicit-hourly-is-clean",
+      "expression": "0 * * * *",
+      "expect": []
+    }
+  ]
+}

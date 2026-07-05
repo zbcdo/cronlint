@@ -1,0 +1,49 @@
+{
+  "$schema": "../schema.json",
+  "rule": "range-wrap",
+  "vectors": [
+    {
+      "name": "friday-to-monday",
+      "expression": "0 0 * * FRI-MON",
+      "expect": [{ "rule": "range-wrap", "severity": "warning", "field": "dayOfWeek" }]
+    },
+    {
+      "name": "hours-22-to-2-also-hits-dst-window",
+      "expression": "0 22-2 * * *",
+      "expect": [
+        { "rule": "range-wrap", "severity": "warning", "field": "hour" },
+        { "rule": "dst-ambiguous", "severity": "info", "field": "hour" }
+      ]
+    },
+    {
+      "name": "dom-wrap",
+      "expression": "0 12 25-5 * *",
+      "expect": [{ "rule": "range-wrap", "severity": "warning", "field": "dayOfMonth" }]
+    },
+    {
+      "name": "months-november-to-february",
+      "expression": "0 12 1 NOV-FEB *",
+      "expect": [{ "rule": "range-wrap", "severity": "warning", "field": "month" }]
+    },
+    {
+      "name": "minute-wrap",
+      "expression": "50-10 12 * * *",
+      "expect": [{ "rule": "range-wrap", "severity": "warning", "field": "minute" }]
+    },
+    {
+      "name": "monday-to-friday-is-clean",
+      "expression": "0 0 * * MON-FRI",
+      "expect": []
+    },
+    {
+      "name": "six-to-seven-is-not-a-wrap",
+      "expression": "0 0 * * 6-7",
+      "expect": [{ "rule": "dow-sunday-7", "severity": "info", "field": "dayOfWeek" }]
+    },
+    {
+      "name": "single-value-range-is-clean",
+      "expression": "0 0 * * 5-5",
+      "expect": []
+    }
+  ]
+}
