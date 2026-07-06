@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "description": "Zero-dependency cron expression parser and linter with a language-agnostic conformance suite",
   "license": "MIT",
-  "author": "René Peter",
+  "author": "René Peter <oss@nexxode.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zbcdo/cronlint"
+    "url": "git+https://github.com/zbcdo/cronlint.git"
   },
   "bugs": {
     "url": "https://github.com/zbcdo/cronlint/issues"
