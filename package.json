@@ -1,7 +1,17 @@
 {
-  "name": "cronlint",
+  "name": "@zbcdo/cronlint",
   "version": "0.1.0",
   "description": "Zero-dependency cron expression parser and linter with a language-agnostic conformance suite",
+  "license": "MIT",
+  "author": "René Peter <oss@nexxode.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zbcdo/cronlint.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zbcdo/cronlint/issues"
+  },
+  "homepage": "https://cronlint.org",
   "keywords": [
     "cron",
     "crontab",
@@ -10,12 +20,6 @@
     "cron-expression",
     "scheduler"
   ],
-  "license": "MIT",
-  "author": "René Peter",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zbcdo/cronlint"
-  },
   "type": "module",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
