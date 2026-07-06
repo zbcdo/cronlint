@@ -5,14 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>cronlint — a linter for cron expressions</title>
   <meta name="description" content="cronlint is a zero-dependency linter for cron expressions. It catches the mistakes that break schedules silently: dates that never fire, jobs that run 1,440 times a day, and clock-change surprises.">
-  <link rel="canonical" href="https://cronlint.org">
+  <link rel="canonical" href="https://cronlint.org/">
+
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://cronlint.org">
+  <meta property="og:url" content="https://cronlint.org/">
+  <meta property="og:site_name" content="cronlint">
   <meta property="og:title" content="cronlint — a linter for cron expressions">
   <meta property="og:description" content="Catches the mistakes that break schedules silently. Zero dependencies, thirteen rules, conformance-tested.">
-  <meta property="og:site_name" content="cronlint">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://cronlint.org/cronlint-og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:alt" content="cronlint — a linter for cron expressions. Terminal showing: cronlint '0 0 30 2 *' returning error[never-fires]: This job will never run.">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="cronlint — a linter for cron expressions">
+  <meta name="twitter:description" content="Catches the cron mistakes that break schedules silently. 13 rules, zero dependencies, CLI + library.">
+  <meta name="twitter:image" content="https://cronlint.org/cronlint-og.png">
+  <meta name="twitter:image:alt" content="cronlint terminal demo: an impossible February 30th schedule caught with error[never-fires].">
+
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f172a'/%3E%3Ctext x='16' y='25' font-family='monospace' font-size='24' font-weight='bold' fill='%23f43f5e' text-anchor='middle'%3E%5E%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f7f9" media="(prefers-color-scheme: light)">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap">
@@ -216,6 +231,23 @@
     .colophon a { color: var(--muted); text-decoration: underline; }
     .colophon a:hover { color: var(--link); }
   </style>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "cronlint",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Cross-platform",
+      "description": "A linter for cron expressions — catches the mistakes that break schedules silently.",
+      "url": "https://cronlint.org/",
+      "installUrl": "https://www.npmjs.com/package/@zbcdo/cronlint",
+      "codeRepository": "https://github.com/zbcdo/cronlint",
+      "license": "https://opensource.org/license/mit/",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": { "@type": "Person", "name": "René Peter", "url": "https://github.com/zbcdo" }
+    }
+  </script>
 </head>
 <body>
   <!-- Simple Icons (simpleicons.org) glyphs, inlined; referenced via <use>. -->
